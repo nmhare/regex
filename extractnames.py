@@ -11,7 +11,7 @@ def findallnames(text: str, nlp):
             named_entities.append(str(i))
     return named_entities
 
-myfile = open('sample_string (1).txt', 'r')
+myfile = open('sample_string (2).txt', 'r')
 outF = open("myOutFile.txt", "w")
 
 nlp = spacy.load('en_core_web_sm')
@@ -30,7 +30,7 @@ for line in lines:
         newline = newline.replace(p, '"phone"')
     
     attributes = ['zipcode','statename','statecode','louisville', 'street names']
-    streetsuffixes = ['Alley', 'Avenue', 'Ave', 'Ave.', 'Branch', 'Bridge', 'Brook', 'Brooks', 'Burg',
+    streetsuffixes = ['Alley', 'Avenue', 'Ave', 'Ave.', 'ave.', 'ave', 'Branch', 'Bridge', 'Brook', 'Brooks', 'Burg',
         'Burgs', 'Bypass', 'Camp', 'Canyon', 'Cape', 'Causeway', 'Center', 'Centers', 'Circle',
         'Circles', 'Cliff', 'Cliffs', 'Club', 'Common', 'Corner', 'Corners', 'Course', 'Court',
         'Courts', 'Cove', 'Coves', 'Creek', 'Crescent', 'Crest', 'Crossing', 'Crossroad', 'Curve',
