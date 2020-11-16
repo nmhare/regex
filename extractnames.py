@@ -135,37 +135,44 @@ for line in lines:
     newaddr = ''
     streetmarker = ''
     for streettype in streetsuffixes:
-        if (' ' + streettype.lower()) in newline.lower():
+        streetmarker = ''
+        newaddr = ''
+        if ' ' + streettype in newline:
             streetmarker = streettype
-            print(streetmarker)
-    print('-------------')
+            print('-------------')
 
-    cityname = 'Louisville'
-    if cityname in newline:
-        newline = newline.replace(cityname, '')
-    newaddr = newaddr + cityname
+            cityname = 'Louisville'
+            if cityname in newline:
+                print(newline)
+                newline = newline.replace(cityname, '')
+                print(newline)
+            print('newaddr is ', newaddr, ', cityname is ', cityname)
+            newaddr = newaddr + cityname
+            print('newaddr is ', newaddr)
 
-    statename = re.findall(region1, newline)
-    print(statename)
-    if statename != []:
-        newline = newline.replace(statename, '')
-        newaddr = newaddr + statename
-    else:
-        newaddr = newaddr + ' KY'
+            statename = re.findall(region1, newline)
+            print(statename)
+            if statename != []:
+                newline = newline.replace(statename, '')
+                newaddr = newaddr + statename
+            else:
+                newaddr = newaddr + ' KY'
+                print('newaddr is ', newaddr)
 
-    zipcode = re.findall(r'^[0-9]{5}(-[0-9]{4})?$', newline)
-    print(zipcode)
-    if zipcode != []:
-        newline = newline.replace(zipcode, '')
-        newaddr = newaddr + zipcode
+            zipcode = re.findall(r'^[0-9]{5}(-[0-9]{4})?$', newline)
+            print(zipcode)
+            if zipcode != []:
+                newline = newline.replace(zipcode, '')
+                newaddr = newaddr + zipcode
 
-    newline = newline.replace(streetmarker, streetmarker + ', ' +  newaddr)
-    print(newline, '___________________')
+            newline = newline.replace(streetmarker, streetmarker + ', ' +  newaddr)
+            print('newline is', newline, ', streetmarker is ', streetmarker)
+            break
 
     address = pyap.parse(newline, country='US')
     for a in address:
         newline = newline.replace(str(a), '"address"')
-    
+
     names = findallnames(newline, nlp)
     for n in names:
         newline = newline.replace(n, '"name"')
