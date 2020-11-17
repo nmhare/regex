@@ -18,7 +18,7 @@ for a in range(50):
     attributes['residence'] = attributes['residence'].replace('\n', ' ')
 
     for n in randomly(fields_):
-        for m in range(random.randint(1,3)):
+        for  m in range(random.randint(1,3)):
             newline += fake.word() + ' '
         newline += attributes[n] + ' '
     newline += '.\n'

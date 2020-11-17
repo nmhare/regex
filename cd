@@ -1,0 +1,11 @@
+sys.path = [
+    '/mnt/c/Users/nmhar/OneDrive/Documents/RA Work/2020-2021/ass_4 pulling names/regex',
+    '/home/nmhare/anaconda3/lib/python38.zip',
+    '/home/nmhare/anaconda3/lib/python3.8',
+    '/home/nmhare/anaconda3/lib/python3.8/lib-dynload',
+    '/home/nmhare/.local/lib/python3.8/site-packages',
+    '/home/nmhare/anaconda3/lib/python3.8/site-packages',
+]
+USER_BASE: '/home/nmhare/.local' (exists)
+USER_SITE: '/home/nmhare/.local/lib/python3.8/site-packages' (exists)
+ENABLE_USER_SITE: True
