@@ -22,7 +22,7 @@ def findinstances(string, elems):
             elem = string[elem_index:len(elem) + elem_index]
             if char_after(string, elem) == 's':
                 elem = elem + 's'
-            instances.append(elem)
+            instances.append(elem.strip())
     print(instances)
     return instances 
 
@@ -66,15 +66,13 @@ for suffix in streetsuffixes:
 region1 = r'\b((?:ky|Ky|KY)|(?:[Kk][Ee][Nn][Tt][Uu][Cc][Kk][Yy]))\b'
 
 for line in lines:
-    print('here is the original line:')
-    print(line)
     # credit: u/buckley, 
     # https://stackoverflow.com/questions/34527917/extracting-phone-numbers-from-a-free-form-text-in-python-by-using-regex    
     # credit: u/0x90, 
     # https://stackoverflow.com/questions/17681670/extract-email-sub-strings-from-large-document
     
     newline = line
-    
+    print(line)
     phone = re.findall(r'\(?[0-9]{3}\)?[-./]?\s*[0-9]{3}\s*[-./]?\s*[0-9]{4}[.x]?[0-9]{0,}\b', newline)
     for p in phone:
         newline = newline.replace(p, '"phone"')    
@@ -86,13 +84,27 @@ for line in lines:
         for n in names:
             if foundsuffix in n:
                 names.remove(n)
-    print(names, type(names))
+        doc = nlp(newline)
+        number = ''
+        i = 0
+        for token in doc:
+            if token.pos_ == 'NUM':
+                number = token.text
+                break
+            i = i + 1
+        j = 0
+        for token in doc:
+            if token.text == foundsuffix:
+                break
+            elif token.text == foundsuffix[-1] and not foundsuffix[-1:].isalnum():
+                break
+            j = j + 1
+        if j - i not in range(0,4):
+            foundsuffixes.remove(foundsuffix)
 
     for suffix in foundsuffixes:
-        print('suffix ', suffix)
         newaddr = ''
         if foundsuffixes[0] in newline:
-            print('found the suffix')
             cityname = 'Louisville'
             if cityname in newline:
                 cityname = cityname + char_after(newline, cityname)
@@ -121,12 +133,9 @@ for line in lines:
             else:    
                 newline = newline.replace(suffix, suffix + ' ' + newaddr) 
     
-            print('at the end, we had constructed newline:')
-            print(newline)
             break
 
     address = pyap.parse(newline, country='US')
-    print('pyap found', address)
     for a in address:
         newline = newline.replace(str(a), '"address"')
 
