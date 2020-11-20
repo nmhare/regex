@@ -11,44 +11,63 @@ def findallnames(text: str, nlp):
             named_entities.append(str(i))
     return named_entities
 
-myfile = open('sample_string (1).txt', 'r')
+def char_after(string, substring):
+    return string[string.index(substring) + len(substring) : string.index(substring) + len(substring) + 1]
+
+def findinstances(string, elems):
+    instances = []
+    for elem in elems:
+        if (elem.lower() in string.lower()):
+            elem_index = string.lower().index(elem.lower())
+            elem = string[elem_index:len(elem) + elem_index]
+            if char_after(string, elem) == 's':
+                elem = elem + 's'
+            instances.append(elem)
+    print(instances)
+    return instances 
+
+myfile = open('sample_string (2).txt', 'r')
+lines = myfile.readlines()
 outF = open("myOutFile.txt", "w")
 
 nlp = spacy.load('en_core_web_sm')
 
+streetsuffixes = ['Alley', 'Avenue', 'Branch', 'Bridge', 'Brook', 'Burg',
+        'Bypass', 'Camp', 'Canyon', 'Cape', 'Causeway', 'Center', 'Circle',
+        'Cliff', 'Club', 'Common', 'Corner', 'Course', 'Court',
+        'Cove', 'Creek', 'Crescent', 'Crest', 'Crossing', 'Crossroad', 'Curve',
+        'Dale', 'Dam', 'Divide', 'Drive', 'Estate','Expressway',
+        'Extension', 'Fall', 'Ferry', 'Field', 'Flat',
+        'Ford', 'Forest','Forge', 'Fork', 'Fort', 'Freeway',
+        'Garden', 'Gateway', 'Glen', 'Glens', 'Green', 'Grove', 'Harbor',
+        'Haven', 'Heights', 'Highway',  'Hill', 'Hollow', 'Inlet', 'Islands', 'Island', 'Isles', 
+        'Isle',  'Junction', 'Key',  'Knoll',
+        'Lake', 'Landing', 'Land', 'Lane', 'Light', 'Loaf', 'Lock', 'Lodge',
+         'Loop', 'Mall', 'Manor', 'Meadow', 'Mews', 'Mill', 'Mills', 'Mission',
+        'Mission', 'Motorway', 'Mount', 'Mountains', 'Mountain',  'Neck', 'Orchard',
+        'Overpass', 'Parkway', 'Park', 'Passage', 'Pass', 'Path', 'Pike', 'Pine',
+        'Place', 'Plain', 'Plaza', 'Points', 
+        'Port', 'Prairie', 'Radial', 'Ramp', 'Ranch', 'Rapid', 'Rest', 'Ridge',
+        'River', 'Road', 'Route', 'Row', 'Rue', 'Run', 'Shoal',
+        'Shore', 'Skyway', 'Spring',  'Spurs', 'Square',
+        'Station', 'Stravenue',  'Stream', 'Street',
+        'Summit', 'Terrace', 'Throughway', 'Trace', 'Track', 'Trafficway',
+        'Trail', 'Tunnel', 'Turnpike', 'Turnpike', 'Underpass', 'Union',
+        'Valley', 'Via', 'Viaduct', 'View', 'Village', 'Ville',
+        'Vista', 'Walk', 'Wall', 'Way',  'Well', 'Ave', 'St', 'Blvd']
 
 
-
-streetsuffixes = ['Alley', 'Avenue', 'Ave', 'ave', 'Branch', 'Bridge', 'Brook', 'Brooks', 'Burg',
-        'Burgs', 'Bypass', 'Camp', 'Canyon', 'Cape', 'Causeway', 'Center', 'Centers', 'Circle',
-        'Circles', 'Cliff', 'Cliffs', 'Club', 'Common', 'Corner', 'Corners', 'Course', 'Court',
-        'Courts', 'Cove', 'Coves', 'Creek', 'Crescent', 'Crest', 'Crossing', 'Crossroad', 'Curve',
-        'Dale', 'Dam', 'Divide', 'Drive', 'Drive', 'Drives', 'Estate', 'Estates', 'Expressway',
-        'Extension', 'Extensions', 'Fall', 'Falls', 'Ferry', 'Field', 'Fields', 'Flat', 'Flats',
-        'Ford', 'Fords', 'Forest', 'Forge', 'Forges', 'Fork', 'Forks', 'Fort', 'Freeway', 'Garden',
-        'Gardens', 'Gateway', 'Glen', 'Glens', 'Green',  'Greens', 'Grove', 'Groves', 'Harbor', 'Harbors',
-        'Haven', 'Heights', 'Highway', 'Hill', 'Hills', 'Hollow', 'Inlet', 'Inlet', 'Island', 'Island',
-        'Islands', 'Islands', 'Isle', 'Isle', 'Junction', 'Junctions', 'Key', 'Keys', 'Knoll', 'Knolls',
-        'Lake', 'Lakes', 'Land', 'Landing', 'Lane', 'Light', 'Loaf', 'Lock', 'Locks', 'Locks', 'Lodge',
-        'Lodge', 'Loop', 'Mall', 'Manor', 'Manors', 'Meadow', 'Meadows', 'Mews', 'Mill', 'Mills', 'Mission',
-        'Mission', 'Motorway', 'Mount', 'Mountain', 'Mountain', 'Mountains', 'Mountains', 'Neck', 'Orchard',
-        'Overpass', 'Park', 'Parks', 'Parkway', 'Parkways', 'Pass', 'Passage', 'Path', 'Pike', 'Pine',
-        'Pines', 'Place', 'Plain', 'Plains', 'Plains', 'Plaza', 'Plaza', 'Point', 'Points', 'Port', 'Port',
-        'Ports', 'Ports', 'Prairie', 'Prairie', 'Radial', 'Ramp', 'Ranch', 'Rapid', 'Rapids', 'Rest', 'Ridge',
-        'Ridges', 'River', 'Road', 'Road', 'Roads', 'Roads', 'Route', 'Row', 'Rue', 'Run', 'Shoal', 'Shoals',
-        'Shore', 'Shores', 'Skyway', 'Spring', 'Springs', 'Springs', 'Spur', 'Spurs', 'Square', 'Square',
-        'Squares', 'Squares', 'Station', 'Station', 'Stravenue', 'Stravenue', 'Stream', 'Stream', 'Street',
-        'Street', 'Streets', 'St', 'st', 'Summit', 'Summit', 'Terrace', 'Throughway', 'Trace', 'Track', 'Trafficway',
-        'Trail', 'Trail', 'Tunnel', 'Tunnel', 'Turnpike', 'Turnpike', 'Underpass', 'Union', 'Unions',
-        'Valley', 'Valleys', 'Via', 'Viaduct', 'View', 'Village', 'Village', 'Villages', 'Ville',
-        'Vista', 'Vista', 'Walk', 'Walks', 'Wall', 'Way', 'Ways', 'Well', 'Wells']
-
+endings = ['.,',',', ' ', '.','\n']
+newsuffixes = []
+for suffix in streetsuffixes:
+    for ending in endings:
+        newsuffixes.append(' ' + suffix + ending)
 
 region1 = r'\b((?:ky|Ky|KY)|(?:[Kk][Ee][Nn][Tt][Uu][Cc][Kk][Yy]))\b'
 
-
-lines = myfile.readlines()
 for line in lines:
+    print('here is the original line:')
+    print(line)
     # credit: u/buckley, 
     # https://stackoverflow.com/questions/34527917/extracting-phone-numbers-from-a-free-form-text-in-python-by-using-regex    
     # credit: u/0x90, 
@@ -58,24 +77,27 @@ for line in lines:
     
     phone = re.findall(r'\(?[0-9]{3}\)?[-./]?\s*[0-9]{3}\s*[-./]?\s*[0-9]{4}[.x]?[0-9]{0,}\b', newline)
     for p in phone:
-        newline = newline.replace(p, '"phone"')
-    
+        newline = newline.replace(p, '"phone"')    
 
-    endings = [',', ' ', '.','\n']
-    newsuffixes = []
-    for suffix in streetsuffixes:
-        for ending in endings:
-            newsuffixes.append(' ' + suffix + ending)
+    foundsuffixes = findinstances(newline, newsuffixes)
+    names = findallnames(newline, nlp)
 
-    for suffix in newsuffixes:
+    for foundsuffix in foundsuffixes:
+        for n in names:
+            if foundsuffix in n:
+                names.remove(n)
+    print(names, type(names))
+
+    for suffix in foundsuffixes:
+        print('suffix ', suffix)
         newaddr = ''
-        if suffix in newline:
+        if foundsuffixes[0] in newline:
+            print('found the suffix')
             cityname = 'Louisville'
             if cityname in newline:
-                char = newline[newline.index(cityname) + 10 : newline.index(cityname) + 11]
-                if char != ' ':
-                    char = char + ' '
-                cityname = cityname + char
+                cityname = cityname + char_after(newline, cityname)
+                if cityname[-1] != ' ':
+                    cityname = cityname + ' '
                 newline = newline.replace(cityname, '')
             newaddr = newaddr + cityname
 
@@ -85,22 +107,22 @@ for line in lines:
                 newline = newline.replace(statename[0], '')
                 newaddr = newaddr + statename[0]
             else:
-                newaddr = newaddr + ' KY'
+                newaddr = newaddr + ' KY ' #might need to fix spacing
 
-            zipcode = re.findall(r'\d{5}', newline)
+            zipcode = re.findall(r'\d{5}', newline) #might want to hold off on this
             if zipcode != []:
                 newline = newline.replace(zipcode[-1], '')
-                newaddr = newaddr + zipcode[0]
+                newaddr = newaddr + zipcode[-1]
 
             if suffix[-1:] == ' ':
                 newline = newline.replace(suffix, suffix + newaddr + ' ')
             elif suffix[-1:] == '\n':
-                print('HELLO')
                 newline = newline.replace(suffix, suffix[:-1] + ' ' + newaddr + '\n') 
             else:    
                 newline = newline.replace(suffix, suffix + ' ' + newaddr) 
     
-            print('at the end, we had constructed newline', newline)
+            print('at the end, we had constructed newline:')
+            print(newline)
             break
 
     address = pyap.parse(newline, country='US')
@@ -108,7 +130,6 @@ for line in lines:
     for a in address:
         newline = newline.replace(str(a), '"address"')
 
-    names = findallnames(newline, nlp)
     for n in names:
         newline = newline.replace(n, '"name"')
 
